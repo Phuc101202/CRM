@@ -1,17 +1,17 @@
 <p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
   <img src="https://img.shields.io/badge/Node.js-v24-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
   <img src="https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express&logoColor=white" />
   <img src="https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
   <img src="https://img.shields.io/badge/Gemini_AI-2.5_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white" />
-  <img src="https://img.shields.io/badge/JWT-Auth-black?style=for-the-badge&logo=jsonwebtokens&logoColor=white" />
-  <img src="https://img.shields.io/badge/status-WIP-orange?style=for-the-badge" />
 </p>
 
-<h1 align="center">⚡ SaaS CRM — Backend API</h1>
+<h1 align="center">⚡ SaaS CRM — AI-Powered Dashboard</h1>
 
 <p align="center">
-  A modern, AI-powered CRM REST API built with Node.js, Express, and MongoDB Atlas.<br/>
-  Designed for scalability with Gemini AI integration for smart lead insights.
+  A modern, full-stack CRM application featuring an intelligent backend and a highly interactive React frontend.<br/>
+  Designed for scalability with Kanban-style pipeline management, dynamic charts, and Google Gemini AI integration.
 </p>
 
 ---
@@ -19,319 +19,205 @@
 ## 📋 Table of Contents
 
 - [Overview](#-overview)
-- [Tech Stack](#-tech-stack)
+- [Architecture & Tech Stack](#-architecture--tech-stack)
+- [Features](#-features)
 - [Project Structure](#-project-structure)
-- [Data Models](#-data-models)
-- [API Flow](#-api-flow)
-- [API Reference](#-api-reference)
 - [Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
 - [Environment Variables](#-environment-variables)
+- [API Reference](#-api-reference)
 - [Roadmap](#-roadmap)
 
 ---
 
 ## 🔍 Overview
 
-This is the **backend service** of a SaaS CRM application. It exposes a RESTful JSON API that handles:
-
-- 🔐 User authentication (Register / Login / JWT)
-- 📊 Lead pipeline management with Kanban-style ordering
-- 👥 Contact management *(model defined, CRUD coming)*
-- ✅ Task management *(model defined, CRUD coming)*
-- 📝 Notes for Leads & Contacts *(model defined, CRUD coming)*
-- 🤖 AI-powered lead summaries & risk scoring via **Google Gemini 2.5 Flash**
+This project is a complete **SaaS CRM solution** consisting of two main components:
+1. **Frontend**: A lightning-fast Vite + React SPA with Kanban drag-and-drop (`dnd-kit`), data visualization (`recharts`), and utility-first styling (`tailwindcss`).
+2. **Backend**: A robust Express REST API connected to MongoDB Atlas, implementing JWT-based authentication, structured data models (Leads, Contacts, Tasks), and AI-driven insights via Google Gemini.
 
 ---
 
-## 🛠 Tech Stack
+## 🛠 Architecture & Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Runtime | Node.js v24 (ESM `"type": "module"`) |
-| Framework | Express.js 4.x |
-| Database | MongoDB Atlas (Mongoose ODM) |
-| Auth | JSON Web Token (JWT) + bcryptjs |
-| AI | Google Gemini API (`@google/genai`) |
-| Dev | Nodemon, Morgan (HTTP logger) |
+### Frontend (`/frontend`)
+- **Framework**: React 19 + Vite
+- **Routing**: React Router v7
+- **Styling**: Tailwind CSS v4 + `clsx` / `tailwind-merge`
+- **Drag & Drop**: `@dnd-kit` for Kanban pipeline
+- **Charts & Data**: `recharts` for analytics dashboards
+- **Forms & Fetching**: `react-hook-form`, `axios`
+- **UI Components**: `lucide-react` for iconography, `sonner` for toast notifications
+
+### Backend (`/backend`)
+- **Runtime**: Node.js v24 (ESM `"type": "module"`)
+- **Framework**: Express.js 4.x
+- **Database**: MongoDB Atlas (Mongoose ODM)
+- **Security & Auth**: JSON Web Token (JWT) + `bcryptjs`
+- **AI Integration**: Google Gemini API (`@google/genai`) for lead summaries and risk scoring
+
+---
+
+## ✨ Features
+
+- **🔐 Secure Authentication**: JWT-based login/register flow with encrypted passwords.
+- **📊 Interactive Dashboard**: Visual analytics and metrics tracking.
+- **🚀 Kanban Pipeline**: Drag-and-drop lead management to visually move deals across stages (New → Qualified → Proposal → Won/Lost).
+- **🤖 AI Insights**: Smart lead summarization and conversion risk scoring powered by Google Gemini 2.5 Flash.
+- **👥 Contact & Task Management**: Easily track interactions, linked tasks, and notes per client.
+- **📱 Responsive UI**: Beautifully designed interface adaptable to different screen sizes.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-backend/
-├── config/
-│   └── db.js                    # MongoDB Atlas connection
-├── controllers/
-│   ├── auth.controller.js       # Register, Login, GetMe, UpdateProfile
-│   └── lead.controller.js       # CRUD + Reorder for Lead pipeline
-├── middleware/
-│   ├── auth.middleware.js       # JWT protect guard
-│   └── error.middleware.js      # 404 & global error handler
-├── models/
-│   ├── User.js                  # User schema (bcrypt pre-save hook)
-│   ├── Lead.js                  # Lead schema (pipeline, AI fields)
-│   ├── Contact.js               # Contact schema (full-text index)
-│   ├── Task.js                  # Task schema (relatedLead/Contact)
-│   └── Note.js                  # Note schema (pinnable, linked)
-├── routes/
-│   ├── auth.routes.js           # /api/auth/*
-│   └── lead.routes.js           # /api/leads/*
-├── utils/
-│   ├── ApiError.js              # Custom HTTP error class
-│   ├── asyncHandler.js          # Async wrapper (eliminates try/catch)
-│   └── generateToken.js         # JWT sign helper
-├── .env.example                 # Environment variable template
-├── .gitignore
-├── package.json
-└── server.js                    # App entry point
+crm-saas/
+├── backend/                     # Express API Server
+│   ├── config/                  # MongoDB config
+│   ├── controllers/             # Business logic (Auth, Leads, etc.)
+│   ├── middleware/              # JWT protect, Error handling
+│   ├── models/                  # Mongoose Schemas (User, Lead, Contact...)
+│   ├── routes/                  # Express Router definitions
+│   ├── utils/                   # Helpers (generateToken, asyncHandler)
+│   ├── .env.example             # Backend ENV template
+│   └── server.js                # Backend Entry Point
+│
+├── frontend/                    # React + Vite Application
+│   ├── public/                  # Static assets
+│   ├── src/                     # React source code
+│   │   ├── components/          # Reusable UI components
+│   │   ├── pages/               # Application views/pages
+│   │   ├── context/             # Global state (Auth, Theme)
+│   │   ├── services/            # API/Axios calls
+│   │   ├── utils/               # Formatters, helpers
+│   │   ├── App.jsx              # Root component & Routing
+│   │   └── main.jsx             # Frontend Entry Point
+│   ├── .env.example             # Frontend ENV template
+│   ├── tailwind.config.js       # Tailwind theme configuration
+│   └── vite.config.js           # Vite bundler config
+│
+└── README.md                    # Project Documentation
 ```
-
----
-
-## 🗃 Data Models
-
-### User
-| Field | Type | Notes |
-|-------|------|-------|
-| `name` | String | Required |
-| `email` | String | Unique, lowercase |
-| `password` | String | Hashed (bcrypt), `select: false` |
-| `role` | String | `"owner"` \| `"member"` |
-| `company` | String | Optional |
-| `avatar` | String | URL, optional |
-
-> Password is auto-hashed via `pre("save")` Mongoose hook.
-
-### Lead
-| Field | Type | Notes |
-|-------|------|-------|
-| `owner` | ObjectId → User | Required, indexed |
-| `name` | String | Required |
-| `email`, `phone`, `company` | String | Optional |
-| `status` | Enum | `New` \| `Qualified` \| `Proposal` \| `Won` \| `Lost` |
-| `priority` | Enum | `Low` \| `Medium` \| `High` |
-| `source` | Enum | `Website` \| `Referral` \| `Advertisement` \| `Event` \| `Other` |
-| `value` | Number | Deal value (min: 0) |
-| `tags` | [String] | Flexible tagging |
-| `order` | Number | Kanban column sort order |
-| `aiSummary` | String | Generated by Gemini AI |
-| `aiRiskScore` | Number | Scored by Gemini AI |
-
-### Contact
-| Field | Type | Notes |
-|-------|------|-------|
-| `owner` | ObjectId → User | Indexed |
-| `name`, `email`, `phone`, `company`, `title` | String | |
-| `tags` | [String] | |
-| `favorite` | Boolean | |
-
-> Full-text index on `name`, `email`, `company`.
-
-### Task
-| Field | Type | Notes |
-|-------|------|-------|
-| `owner` | ObjectId → User | Indexed |
-| `title` | String | Required |
-| `status` | Enum | `Pending` \| `In Progress` \| `Completed` |
-| `priority` | Enum | `Low` \| `Medium` \| `High` |
-| `dueDate`, `completedAt` | Date | |
-| `relatedLead` | ObjectId → Lead | Optional |
-| `relatedContact` | ObjectId → Contact | Optional |
-
-### Note
-| Field | Type | Notes |
-|-------|------|-------|
-| `owner` | ObjectId → User | Indexed |
-| `content` | String | Required |
-| `lead` | ObjectId → Lead | Optional |
-| `contact` | ObjectId → Contact | Optional |
-| `pinned` | Boolean | |
-
----
-
-## 🔄 API Flow
-
-```
-Client Request
-      │
-      ▼
-  Express Router
-      │
-      ▼
- auth.middleware.js (protect)
-  → Validates Bearer JWT
-  → Attaches req.user
-      │
-      ▼
-  Controller (asyncHandler)
-  → Business Logic
-  → Mongoose Query
-      │
-      ├── ✅ Success → res.json({ success: true, data })
-      │
-      └── ❌ Error  → next(new ApiError(status, message))
-                            │
-                            ▼
-                   error.middleware.js
-                   → Normalizes error (CastError, ValidationError, Duplicate)
-                   → res.status(code).json({ success: false, ... })
-```
-
-### Authentication Flow
-
-```
-POST /api/auth/register
-  → Validate input
-  → Check email duplicate
-  → User.create() → bcrypt hash password (pre-save hook)
-  → generateToken(user._id)
-  → Return { token, user }
-
-POST /api/auth/login
-  → Find user by email (.select("+password"))
-  → bcrypt.compare(enteredPassword, hashedPassword)
-  → generateToken(user._id)
-  → Return { token, user }
-
-Protected routes:
-  GET /api/auth/me
-  PUT /api/auth/profile
-  → Bearer <token> required
-```
-
----
-
-## 📡 API Reference
-
-### Auth — `/api/auth`
-
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| `POST` | `/register` | ❌ | Create new account |
-| `POST` | `/login` | ❌ | Login, get JWT token |
-| `GET` | `/me` | ✅ | Get current user profile |
-| `PUT` | `/profile` | ✅ | Update name / company / avatar / password |
-
-### Leads — `/api/leads`
-
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| `GET` | `/` | ✅ | Get all leads (filterable by `status`, `priority`, `source`, `search`) |
-| `POST` | `/` | ✅ | Create a new lead |
-| `GET` | `/:id` | ✅ | Get single lead |
-| `PUT` | `/:id` | ✅ | Update lead |
-| `DELETE` | `/:id` | ✅ | Delete lead |
-| `POST` | `/reorder` | ✅ | Batch update `order` for Kanban drag-drop |
-
-#### Query Params for `GET /api/leads`
-```
-?status=New
-?priority=High
-?source=Website
-?search=john          ← searches name, email, company
-```
-
-### Health Check
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/health` | Returns `{ success: true, status: "OK" }` |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js >= 18
-- MongoDB Atlas account
-- Google Gemini API key
+- **Node.js** >= 18
+- **MongoDB Atlas** account (or local MongoDB)
+- **Google Gemini API Key**
 
-### Installation
+---
 
-```bash
-# 1. Clone repository
-git clone https://github.com/<your-username>/crm-saas.git
-cd crm-saas/backend
+### Backend Setup
 
-# 2. Install dependencies
-npm install
+1. **Navigate to the backend directory**:
+   ```bash
+   cd backend
+   ```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Configure Environment Variables**:
+   ```bash
+   cp .env.example .env
+   ```
+   *Edit `.env` and fill in your `MONGO_URI`, `JWT_SECRET`, and `GEMINI_API_KEY`.*
+4. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+   *The backend will run on `http://localhost:8000`.*
 
-# 3. Configure environment
-cp .env.example .env
-# Edit .env with your credentials
+---
 
-# 4. Start dev server
-npm run dev
-```
+### Frontend Setup
 
-The server starts on `http://localhost:8000`.
-
-### NPM Scripts
-
-| Script | Command | Description |
-|--------|---------|-------------|
-| `dev` | `nodemon server.js` | Development with hot reload |
-| `start` | `node server.js` | Production start |
-| `seed` | `node seeder.js` | Seed database *(coming soon)* |
+1. **Open a new terminal and navigate to the frontend directory**:
+   ```bash
+   cd frontend
+   ```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Configure Environment Variables**:
+   ```bash
+   cp .env.example .env
+   ```
+   *Edit `.env` to point `VITE_API_URL` to your backend (e.g., `http://localhost:8000/api`).*
+4. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+   *The frontend will run on `http://localhost:5173`.*
 
 ---
 
 ## 🔑 Environment Variables
 
-Copy `.env.example` to `.env` and fill in the values:
-
+### Backend (`backend/.env`)
 ```env
 PORT=8000
 NODE_ENV=development
-CLIENT_URL=http://localhost:3000
+CLIENT_URL=http://localhost:5173
 
-# MongoDB Atlas — use direct URI if SRV DNS is blocked by ISP
+# MongoDB Connection
 MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/
+# Note: If experiencing ECONNREFUSED with Vietnamese ISPs, use standard direct URI instead of SRV
 
+# Authentication
 JWT_SECRET=your_super_secret_key_min_32_chars
 JWT_EXPIRES_IN=7d
 
+# Google Gemini AI
 GEMINI_API_KEY=your_google_gemini_api_key
 GEMINI_MODEL=gemini-2.5-flash
 ```
 
-> **Note:** If you get `querySrv ECONNREFUSED` (common with Vietnamese ISPs), replace `mongodb+srv://` with a direct standard URI listing all shard hosts explicitly.
+### Frontend (`frontend/.env`)
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+---
+
+## 📡 API Reference (Backend)
+
+| Category | Method | Endpoint | Auth | Description |
+|----------|--------|----------|------|-------------|
+| **Auth** | `POST` | `/api/auth/register` | ❌ | Create new account |
+| **Auth** | `POST` | `/api/auth/login` | ❌ | Login, get JWT token |
+| **Auth** | `GET` | `/api/auth/me` | ✅ | Get current user profile |
+| **Auth** | `PUT` | `/api/auth/profile` | ✅ | Update profile info |
+| **Leads** | `GET` | `/api/leads` | ✅ | Get leads (supports search, filters) |
+| **Leads** | `POST` | `/api/leads` | ✅ | Create a new lead |
+| **Leads** | `PUT` | `/api/leads/:id` | ✅ | Update lead details |
+| **Leads** | `POST` | `/api/leads/reorder` | ✅ | Batch update `order` for Kanban |
+| **System**| `GET` | `/api/health` | ❌ | Health check |
 
 ---
 
 ## 🗺 Roadmap
 
-### ✅ Done (Day 1)
-- [x] Express server setup (ESM, CORS, Morgan)
-- [x] MongoDB Atlas connection with error handling
-- [x] User model with bcrypt password hashing
-- [x] JWT authentication (Register / Login / GetMe / UpdateProfile)
-- [x] `protect` middleware (Bearer token guard)
-- [x] `ApiError` class & global error handler (CastError, ValidationError, Duplicate key)
-- [x] `asyncHandler` wrapper
-- [x] Lead model with pipeline stages, AI fields, ordering
-- [x] Lead CRUD + filter/search + Kanban reorder
-- [x] Contact, Task, Note data models defined
-
-### 🔜 Coming Next
-- [ ] Contact CRUD routes & controller
-- [ ] Task CRUD routes & controller
-- [ ] Note CRUD routes & controller
-- [ ] Gemini AI: lead summary generation endpoint
-- [ ] Gemini AI: lead risk score prediction
-- [ ] Dashboard analytics endpoint (pipeline value, conversion rate)
-- [ ] Rate limiting & Helmet security headers
-- [ ] Role-based access control (`owner` / `member`)
-- [ ] Pagination & cursor-based listing
-- [ ] Database seeder script
+- [x] Backend Express API setup (Auth, Leads, DB Models)
+- [x] Frontend React + Vite boilerplate setup (Tailwind, Routing)
+- [x] Integrate Frontend Auth state with Backend JWT
+- [x] Implement Kanban Drag-and-Drop for Leads
+- [ ] Implement Dashboard Charts (Revenue, Lead Conversion)
+- [ ] Connect Gemini AI for Lead Summarization & Scoring
+- [ ] CRUD interfaces for Contacts and Tasks
+- [ ] Production Deployment (Docker / Vercel / Render)
 
 ---
 
 ## 👤 Author
 
 **Phuc Lam** — [GitHub](https://github.com/lamminhphuc1012)
-
----
 
 <p align="center">Built with ❤️ — SaaS CRM powered by AI</p>

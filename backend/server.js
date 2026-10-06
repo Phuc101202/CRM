@@ -8,12 +8,17 @@ import {notFound, errorHandler} from './middleware/error.middleware.js';
 
 import authRoutes from './routes/auth.routes.js';
 import leadRoutes from './routes/lead.routes.js';
+import contactRoutes from './routes/contact.routes.js';
+import noteRoutes from './routes/note.routes.js';
+import taskRoutes from './routes/task.route.js';
+import aiRoutes from './routes/ai.routes.js';
+import analyticsRoutes from './routes/analytics.routes.js'
 
 const app = express();
 
 /* ----------------- Middleware ----------------- */
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
 }));
 
@@ -29,6 +34,12 @@ app.get('/api/health', (req, res) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
+app.use('/api/contacts', contactRoutes);
+app.use('/api/notes', noteRoutes);
+app.use('/api/tasks', taskRoutes);
+
+app.use("/api/ai", aiRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 /* ----------------- Error Handling ----------------- */
 app.use(notFound);
