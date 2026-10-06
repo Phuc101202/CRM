@@ -209,9 +209,9 @@ VITE_API_URL=http://localhost:8000/api
 - [x] Frontend React + Vite boilerplate setup (Tailwind, Routing)
 - [x] Integrate Frontend Auth state with Backend JWT
 - [x] Implement Kanban Drag-and-Drop for Leads
-- [ ] Implement Dashboard Charts (Revenue, Lead Conversion)
-- [ ] Connect Gemini AI for Lead Summarization & Scoring
-- [ ] CRUD interfaces for Contacts and Tasks
+- [x] Implement Dashboard Charts (Revenue, Lead Conversion)
+- [x] Connect Gemini AI for Lead Summarization & Scoring
+- [x] CRUD interfaces for Contacts and Tasks
 - [ ] Production Deployment (Docker / Vercel / Render)
 
 ---
